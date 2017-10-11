@@ -39,10 +39,10 @@ $ gen-yaml --help
 
 ## Containerfile
 
-*Containerfile* 定義了該 rpc 在部署時會用到的資源, 預設讀取位置是專案的 root:
+*Containerfile* 定義了該 app 在部署時會用到的資源, 預設讀取位置是專案的 root:
 
 ```
-your-rpc
+your-app
 ├── src
 │   ├── main
 │   └── test
