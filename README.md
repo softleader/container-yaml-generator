@@ -61,6 +61,8 @@ your-app
 
 能夠定義的內容及專寫方式完全依照 [compose-file](https://docs.docker.com/compose/compose-file/) 的規範
 
+#### default
+
 以下是預設的內容, 也就是下述這些 tag 如果你沒定義, 將直接使用預設的內容:
 
 ```yaml
@@ -77,7 +79,7 @@ networks:
 - softleader
 ```
 
-*Containerfile* 的定義範例:
+#### a real Containerfile example
 
 ```yaml
 common-file-upload-rpc:
@@ -109,6 +111,15 @@ common-file-upload-rpc:
       delay: 5s
   networks:
     - softleader
+```
+
+#### a minimum Containerfile
+
+如果你沒有任何額外設定, 一個最小的 *Containerfile* 只需要定義 service name 以及其 image 位置即可
+
+```yaml
+calculate-rpc:
+  image: softleader.com.tw:5000/softleader-calculate-rpc:v1.0.0
 ```
 
 ### k8s
