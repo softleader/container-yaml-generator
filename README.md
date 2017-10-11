@@ -94,21 +94,21 @@ common-file-upload-rpc:
 
 ```yaml
 common-file-upload-rpc:
-  image: softleader.com.tw:5000/softleader-common-file-upload-rpc:v1.0.0
+  image: 'softleader.com.tw:5000/softleader-common-file-upload-rpc:v1.0.0'
   volumes:
-    - /tmp/uploaded:/uploaded
+    - '/tmp/uploaded:/uploaded'
   deploy:
     mode: replicated
     replicas: 1
     resources:
       limits:
-        cpus: '0.5'
         memory: 512M
+        cpus: '0.5'
     restart_policy:
       condition: on-failure
       delay: 5s
   networks:
-  - softleader
+    - softleader
 ```
 
 ### k8s

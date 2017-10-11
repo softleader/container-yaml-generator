@@ -21,6 +21,7 @@
   "homepage": "https://github.com/softleader/container-yaml-generator#readme",
   "dependencies": {
     "commander": "^2.11.0",
+    "extend": "^3.0.1",
     "fs-extra": "^4.0.2",
     "js-yaml": "^3.10.0"
   }
