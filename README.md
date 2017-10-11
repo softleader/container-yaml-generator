@@ -83,7 +83,7 @@ networks:
 
 ```yaml
 common-file-upload-rpc:
-  image: softleader.com.tw:5000/softleader-common-file-upload-rpc:v1.0.0
+  image: softleader.com.tw:5000/softleader-common-file-upload-rpc:${TAG}
   volumes:
     - /tmp/uploaded:/uploaded
   deploy:
@@ -96,7 +96,7 @@ common-file-upload-rpc:
 
 ```yaml
 common-file-upload-rpc:
-  image: 'softleader.com.tw:5000/softleader-common-file-upload-rpc:v1.0.0'
+  image: 'softleader.com.tw:5000/softleader-common-file-upload-rpc:${TAG}'
   volumes:
     - '/tmp/uploaded:/uploaded'
   deploy:
@@ -119,7 +119,7 @@ common-file-upload-rpc:
 
 ```yaml
 calculate-rpc:
-  image: softleader.com.tw:5000/softleader-calculate-rpc:v1.0.0
+  image: softleader.com.tw:5000/softleader-calculate-rpc:${TAG}
 ```
 
 ### k8s
