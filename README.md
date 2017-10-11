@@ -37,6 +37,84 @@ $ gen-yaml --help
 
 ```
 
+## Containerfile
+
+*Containerfile* 定義了該 rpc 在部署時會用到的資源, 預設讀取位置是專案的 root:
+
+```
+your-rpc
+├── src
+│   ├── main
+│   └── test
+├── pom.xml
+├── Dockerfile
+├── Jenkinsfile
+└── Containerfile
+```
+
+*Containerfile* 一共分成兩種定義的 style:
+
+- `swarm` - for Docker Swarm
+- `k8s` - for Kubernetes
+
+### swarm
+
+能夠定義的內容及專寫方式完全依照 [compose-file](https://docs.docker.com/compose/compose-file/) 的規範
+
+以下是預設的內容, 也就是下述這些 tag 如果你沒定義, 將直接使用預設的內容:
+
+```yaml
+deploy:
+  mode: replicated
+  replicas: 1
+  resources:
+    limits:
+      memory: 512M
+  restart_policy:
+    condition: on-failure
+    delay: 5s
+networks:
+- softleader
+```
+
+*Containerfile* 的定義範例:
+
+```yaml
+common-file-upload-rpc:
+  image: softleader.com.tw:5000/softleader-common-file-upload-rpc:v1.0.0
+  volumes:
+    - /tmp/uploaded:/uploaded
+  deploy:
+    resources:
+      limits:
+        cpus: '0.5'
+```
+
+經過 `gen-yaml` 轉換後將會變成:
+
+```yaml
+common-file-upload-rpc:
+  image: softleader.com.tw:5000/softleader-common-file-upload-rpc:v1.0.0
+  volumes:
+    - /tmp/uploaded:/uploaded
+  deploy:
+    mode: replicated
+    replicas: 1
+    resources:
+      limits:
+        cpus: '0.5'
+        memory: 512M
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+  networks:
+  - softleader
+```
+
+### k8s
+
+Kubernetes style YAML is coming soon :)
+
 ## Example
 
 ### 產生當前目錄下所有子目錄的 YAML
