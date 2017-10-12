@@ -3,8 +3,14 @@
 var program = require('commander');
 var swarm = require('./lib/swarm');
 var kubernetes = require('./lib/kubernetes');
+var fs = require("fs-extra");
 var pjson = require('./package.json');
 var cmd = Object.keys(pjson.bin)[0];
+
+function collect(val, collection) {
+  collection.push(val);
+  return collection;
+}
 
 program
   .usage('[options] <dirs ...>')
@@ -13,6 +19,7 @@ program
   .option('-s --style <style>', 'YAML style, supports \'swarm\' or \'k8s\' (default: swarm)', 'swarm')
   .option('-f --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
   .option('-e --encoding <encoding>', 'specify an encoding to read definition file (default: utf8)', 'utf8')
+  .option('-r --replace <replace>', 'searches a string, or a regular expression and replaces to a new string in generated YAML.', collect, [])
   .on('--help', function() {
     console.log();
     console.log('  %s', pjson.homepage);
@@ -27,12 +34,34 @@ if (!program.args || program.args.length <= 0) {
   process.exit(1);
 }
 
+var yaml;
+
 if (program.style === 'k8s') {
-  kubernetes.generate(program);
+  yaml = kubernetes.generate(program);
 } else if (program.style === 'swarm') {
-  swarm.generate(program);
+  yaml = swarm.generate(program);
 } else {
   console.log('Unsupported YAML style: %s', program.style);
   console.log('See \'%s --help\'.', cmd);
   process.exit(1);
+}
+
+if (program.replace.length > 0) {
+  program.replace
+    .map(r => r.split('='))
+    .forEach(r => {
+      var search = r[0];
+      var replace = r[1];
+      if (search.startsWith('/')) {
+        var lastSlash = search.lastIndexOf("/");
+        search = new RegExp(search.slice(1, lastSlash), search.slice(lastSlash + 1));
+      }
+      yaml = yaml.replace(search, replace);
+    });
+}
+
+if (!!program.output) {
+  fs.writeFileSync(program.output, yaml, program.encoding);
+} else {
+  console.log(yaml);
 }
