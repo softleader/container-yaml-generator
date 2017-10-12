@@ -160,7 +160,7 @@ $ gen-yaml -o docker-compose.yml .
 
 則產生的 `docker-compose.yml` 檔案只包含當前目錄中的服務 
 
-### 產生 YAML 後將 ${TAG} 取代成 v1.0.1
+### 產生 YAML 後將 ${TAG} 取代成 v1.0.0
 
 ```
 $ gen-yaml -o docker-compose.yml -r /\\\${TAG}/g=v1.0.0 $(ls)
