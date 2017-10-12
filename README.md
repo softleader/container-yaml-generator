@@ -30,11 +30,11 @@ $ gen-yaml --help
     -s --style <style>        YAML style, supports 'swarm' or 'k8s' (default: swarm)
     -f --file <file>          specify an alternate definition file (default: Containerfile)
     -e --encoding <encoding>  specify an encoding to read definition file (default: utf8)
+    -r --replace <replace>    searches a string, or a regular expression and replaces to a new string in generated YAML.
     -V, --version             output the version number
     -h, --help                output usage information
 
   https://github.com/softleader/container-yaml-generator#readme
-
 ```
 
 ## Containerfile
