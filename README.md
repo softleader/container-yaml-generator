@@ -27,7 +27,7 @@ $ gen-yaml --help
   Options:
 
     -o --output <output>      write to a file, instead of STDOUT
-    -s --style <style>        YAML style, supports 'swarm' or 'k8s' (default: swarm)
+    -s --style <style>        YAML style, supports 'swarm' or 'k8s' (default: k8s)
     -f --file <file>          specify an alternate definition file (default: Containerfile)
     -e --encoding <encoding>  specify an encoding to read definition file (default: utf8)
     -r --replace <replace>    searches a string, or a regular expression and replaces to a new string in generated YAML.
@@ -82,14 +82,16 @@ networks:
 #### a real Containerfile example
 
 ```yaml
-common-file-upload-rpc:
-  image: softleader.com.tw:5000/softleader-common-file-upload-rpc:${TAG}
-  volumes:
-    - /tmp/uploaded:/uploaded
-  deploy:
-    resources:
-      limits:
-        cpus: '0.5'
+swarm:
+  common-file-upload-rpc:
+    image: softleader.com.tw:5000/softleader-common-file-upload-rpc:${TAG}
+    volumes:
+      - /tmp/uploaded:/uploaded
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+k8s:
 ```
 
 經過 `gen-yaml` 轉換後將會變成:
@@ -118,8 +120,10 @@ common-file-upload-rpc:
 如果你沒有任何額外設定, 一個最小的 *Containerfile* 只需要定義 service name 以及其 image 位置即可
 
 ```yaml
-calculate-rpc:
-  image: softleader.com.tw:5000/softleader-calculate-rpc:${TAG}
+swarm:
+  calculate-rpc:
+    image: softleader.com.tw:5000/softleader-calculate-rpc:${TAG}
+k8s:
 ```
 
 ### k8s
@@ -147,7 +151,7 @@ Kubernetes style YAML is coming soon :)
 在 `~/temp` 中執行:
 
 ```
-$ gen-yaml -o docker-compose.yml $(ls)
+$ gen-yaml -s swarm -o docker-compose.yml $(ls)
 ```
 
 則會產生 `~/temp/docker-compose.yml` 檔案, 裡面包含了上述 4 個 rpc 服務
@@ -155,7 +159,7 @@ $ gen-yaml -o docker-compose.yml $(ls)
 ### 產生當前目錄的 YAML
 
 ```
-$ gen-yaml -o docker-compose.yml .
+$ gen-yaml -s swarm -o docker-compose.yml .
 ```
 
 則產生的 `docker-compose.yml` 檔案只包含當前目錄中的服務 
@@ -163,5 +167,5 @@ $ gen-yaml -o docker-compose.yml .
 ### 產生 YAML 後將 ${TAG} 取代成 v1.0.0
 
 ```
-$ gen-yaml -o docker-compose.yml -r /\\\${TAG}/g=v1.0.0 $(ls)
+$ gen-yaml -s swarm -o docker-compose.yml -r /\\\${TAG}/g=v1.0.0 $(ls)
 ```
