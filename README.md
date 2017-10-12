@@ -163,5 +163,5 @@ $ gen-yaml -o docker-compose.yml .
 ### 產生 YAML 後將 ${TAG} 取代成 v1.0.1
 
 ```
-$ gen-yaml -o docker-compose.yml -r /\\\${TAG}/=v1.0.0 $(ls)
+$ gen-yaml -o docker-compose.yml -r /\\\${TAG}/g=v1.0.0 $(ls)
 ```
