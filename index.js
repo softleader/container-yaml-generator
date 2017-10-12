@@ -16,7 +16,7 @@ program
   .usage('[options] <dirs ...>')
   .description('Generate YAML for Docker Swarm or Kubernetes')
   .option('-o --output <output>', 'write to a file, instead of STDOUT')
-  .option('-s --style <style>', 'YAML style, supports \'swarm\' or \'k8s\' (default: swarm)', 'swarm')
+  .option('-s --style <style>', 'YAML style, supports \'swarm\' or \'k8s\' (default: k8s)', 'k8s')
   .option('-f --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
   .option('-e --encoding <encoding>', 'specify an encoding to read definition file (default: utf8)', 'utf8')
   .option('-r --replace <replace>', 'searches a string, or a regular expression and replaces to a new string in generated YAML.', collect, [])
