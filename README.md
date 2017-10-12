@@ -57,6 +57,16 @@ your-app
 - `swarm` - for Docker Swarm
 - `k8s` - for Kubernetes
 
+sytle 一定要在整份 *Containerfile* 的第一層:
+
+```yaml
+swarm:
+  ...
+  
+k8s:
+  ...
+```
+
 ### swarm
 
 能夠定義的內容及專寫方式完全依照 [compose-file](https://docs.docker.com/compose/compose-file/) 的規範
@@ -91,7 +101,6 @@ swarm:
       resources:
         limits:
           cpus: '0.5'
-k8s:
 ```
 
 經過 `gen-yaml` 轉換後將會變成:
@@ -123,7 +132,6 @@ common-file-upload-rpc:
 swarm:
   calculate-rpc:
     image: softleader.com.tw:5000/softleader-calculate-rpc:${TAG}
-k8s:
 ```
 
 ### k8s
