@@ -24,7 +24,7 @@ program
   .option('-S, --silently', 'generate YAML silently, skip if syntax error, instead of exiting process')
   .option('-e, --extend <extend>', 'extend default definition (default: true)', bool, true)
   .option('-f, --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
-  .option('-e, --encoding <encoding>', 'specify an encoding to read definition file (default: utf8)', 'utf8')
+  .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
   .option('-r, --replace <replace>', 'searches a string, or a regular expression and replaces to a new string in generated YAML.', collect, [])
   .on('--help', function() {
     console.log();
