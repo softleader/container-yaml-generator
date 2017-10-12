@@ -32,7 +32,7 @@ $ gen-yaml --help
     -e --extend <extend>      extend default definition (default: true)
     -f --file <file>          specify an alternate definition file (default: Containerfile)
     -e --encoding <encoding>  specify an encoding to read definition file (default: utf8)
-    -r --replace <replace>    searches a string, or a regular expression and replaces to a new string in generated YAML.
+    -r --replace <replace>    searches a string, or a regular expression and replaces to a new string in generated YAML
     -V, --version             output the version number
     -h, --help                output usage information
 
