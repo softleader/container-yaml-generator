@@ -152,7 +152,7 @@ $ gen-yaml -o docker-compose.yml $(ls)
 
 則會產生 `~/temp/docker-compose.yml` 檔案, 裡面包含了上述 4 個 rpc 服務
 
-### 依照指定目錄產生 YAML
+### 產生當前目錄的 YAML
 
 ```
 $ gen-yaml -o docker-compose.yml .
@@ -160,3 +160,8 @@ $ gen-yaml -o docker-compose.yml .
 
 則產生的 `docker-compose.yml` 檔案只包含當前目錄中的服務 
 
+### 產生 YAML 後將 ${TAG} 取代成 v1.0.1
+
+```
+$ gen-yaml -o docker-compose.yml -r /\\\${TAG}/=v1.0.0 $(ls)
+```
