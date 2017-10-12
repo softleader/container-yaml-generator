@@ -27,8 +27,9 @@ $ gen-yaml --help
   Options:
 
     -o --output <output>      write to a file, instead of STDOUT
-    -s --style <style>        YAML style, supports 'swarm' or 'k8s' (default: k8s)
+    -s --style <style>        YAML style: k8s, swarm (default: k8s)
     -S --silently             generate YAML silently, skip if syntax error, instead of exiting process
+    -e --extend <extend>      extend default definition (default: true)
     -f --file <file>          specify an alternate definition file (default: Containerfile)
     -e --encoding <encoding>  specify an encoding to read definition file (default: utf8)
     -r --replace <replace>    searches a string, or a regular expression and replaces to a new string in generated YAML.
