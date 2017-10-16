@@ -185,7 +185,7 @@ $ gen-yaml -s swarm -o docker-compose.yml -r /\\\${TAG}/g=v1.0.0 $(ls)
 
 
 ```
-$ gen-yaml -s swarm -o docker-compose.yml -e DEVOPS_OPTS=“-DdataSource.username=xxx -DdataSource.password=ooo” $(ls)
+$ gen-yaml -s swarm -o docker-compose.yml -e DEVOPS_OPTS="-DdataSource.username=xxx -DdataSource.password=ooo" $(ls)
 ```
 
 *DEVOPS_OPTS* 是所有 rpc 預留的 docker 環境變數，可以強制覆蓋 config-server 回傳的參數
