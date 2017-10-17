@@ -17,7 +17,7 @@ function bool(val) {
 }
 
 program
-  .usage('[options] <dirs ...>')
+  .usage('[options] <dirs...>')
   .description('Generate YAML for Docker Swarm or Kubernetes')
   .option('-o, --output <output>', 'write to a file, instead of STDOUT')
   .option('-s, --style <style>', 'YAML style: k8s, swarm (default: k8s)', 'k8s')
