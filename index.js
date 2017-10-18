@@ -6,6 +6,8 @@ var kubernetes = require('./lib/kubernetes');
 var fs = require("fs-extra");
 var pjson = require('./package.json');
 var cmd = Object.keys(pjson.bin)[0];
+var path = require('path');
+var ora = require('ora');
 
 function collect(val, collection) {
   collection.push(val);
@@ -68,7 +70,15 @@ if (program.replace.length > 0) {
 }
 
 if (!!program.output) {
-  fs.writeFileSync(program.output, yaml, program.encoding);
+  var spinner = ora("Writing '" + path.resolve(program.output) + "'...").start();
+  try {
+    fs.writeFileSync(program.output, yaml, program.encoding);
+    setTimeout(() => {
+      spinner.succeed("Writing '" + path.resolve(program.output) + "', done.");
+    }, 500);
+  } catch (err) {
+    spinner.fail("Failed to write file: " + err);
+  }
 } else {
   console.log(yaml);
 }
