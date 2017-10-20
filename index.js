@@ -8,6 +8,8 @@ var pjson = require('./package.json');
 var cmd = Object.keys(pjson.bin)[0];
 var path = require('path');
 var ora = require('ora');
+var fmt = require('util').format;
+var drc = require('docker-registry-client');
 
 function collect(val, collection) {
   collection.push(val);
@@ -73,12 +75,42 @@ if (!!program.output) {
   var spinner = ora("Writing '" + path.resolve(program.output) + "'...").start();
   try {
     fs.writeFileSync(program.output, yaml, program.encoding);
-    setTimeout(() => {
-      spinner.succeed("Writing '" + path.resolve(program.output) + "', done.");
-    }, 500);
+    spinner.succeed("Writing '" + path.resolve(program.output) + "', done.");
   } catch (err) {
     spinner.fail("Failed to write file: " + err);
   }
 } else {
   console.log(yaml);
+}
+
+// do image check
+if (!program.silently) {
+  console.log();
+  var regex = /image: '(.+)'/g;
+  let result;
+  while ((result = regex.exec(yaml)) !== null) {
+    new Image(result[1]).checkExist();
+  }
+}
+
+function Image(name){
+  this.checkExist = () => {
+    var repo = drc.parseRepoAndTag(name);
+    if (!repo.official) {
+      var client = drc.createClientV2({name: 'http://' + repo.localName});
+      var a = ora(fmt('Checking \'%s:%s\'...', repo.localName, repo.tag)).start();
+      client.listTags((err, tags) => {
+        if (err) {
+          a.fail(fmt("ImageError: '%s:%s': %s", repo.localName, repo.tag, err));
+        } else {
+          if (tags.tags.includes(repo.tag)) {
+            a.succeed(fmt("'%s:%s' is good to go", repo.localName, repo.tag));
+          } else {
+            a.fail(fmt("ImageError: tag [%s] for '%s' not found", repo.tag, repo.localName));
+          }
+        }
+        client.close();
+      });
+    }
+  }
 }
