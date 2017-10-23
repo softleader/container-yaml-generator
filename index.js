@@ -3,7 +3,8 @@
 var program = require('commander');
 var swarm = require('./lib/swarm');
 var kubernetes = require('./lib/kubernetes');
-var fs = require("fs-extra");
+var output = require("./lib/output");
+var image = require("./lib/image");
 var pjson = require('./package.json');
 var cmd = Object.keys(pjson.bin)[0];
 var path = require('path');
@@ -71,46 +72,30 @@ if (program.replace.length > 0) {
     });
 }
 
-if (!!program.output) {
-  var spinner = ora("Writing '" + path.resolve(program.output) + "'...").start();
-  try {
-    fs.writeFileSync(program.output, yaml, program.encoding);
-    spinner.succeed("Writing '" + path.resolve(program.output) + "', done.");
-  } catch (err) {
-    spinner.fail("Failed to write file: " + err);
-  }
-} else {
-  console.log(yaml);
-}
-
-// do image check
 if (!program.silently) {
-  console.log();
-  var regex = /image: '(.+)'/g;
-  let result;
-  while ((result = regex.exec(yaml)) !== null) {
-    new Image(result[1]).checkExist();
-  }
+  var fetches = extractImages(yaml)
+    .map(drc.parseRepoAndTag)
+    .filter(repo => !repo.official)
+    .map(repo => {
+      repo.schema = 'http';
+      return image.exist(repo);
+    })
+  Promise.all(fetches)
+  .then(images => {
+    output.write(program.output, yaml, program.encoding);
+  })
+  .catch(err => {
+    console.log(err.message);
+    process.exit(1);
+  });
+} else {
+  output.write(program.output, yaml, program.encoding);
 }
 
-function Image(name){
-  this.checkExist = () => {
-    var repo = drc.parseRepoAndTag(name);
-    if (!repo.official) {
-      var client = drc.createClientV2({name: 'http://' + repo.localName});
-      var a = ora(fmt('Checking \'%s:%s\'...', repo.localName, repo.tag)).start();
-      client.listTags((err, tags) => {
-        if (err) {
-          a.fail(fmt("ImageError: '%s:%s': %s", repo.localName, repo.tag, err));
-        } else {
-          if (tags.tags.includes(repo.tag)) {
-            a.succeed(fmt("'%s:%s' is good to go", repo.localName, repo.tag));
-          } else {
-            a.fail(fmt("ImageError: tag [%s] for '%s' not found", repo.tag, repo.localName));
-          }
-        }
-        client.close();
-      });
-    }
+function extractImages(yaml) {
+  var images = [], regex = /image: '(.+)'/g, result;
+  while (result = regex.exec(yaml)) {
+    images.push(result[1]);
   }
+  return images;
 }
