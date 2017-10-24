@@ -8,7 +8,6 @@ var image = require("./lib/image");
 var pjson = require('./package.json');
 var cmd = Object.keys(pjson.bin)[0];
 var path = require('path');
-var ora = require('ora');
 var fmt = require('util').format;
 var drc = require('docker-registry-client');
 
