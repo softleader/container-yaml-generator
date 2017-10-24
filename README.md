@@ -4,7 +4,11 @@ Command line tool to generate a YAML for Docker Swarm or Kubernetes
 
 ## Install
 
-Clone and install via npm
+```
+$ npm install softleader/container-yaml-generator -g
+```
+
+or build from suorce code:
 
 ```
 $ git clone git@github.com:softleader/container-yaml-generator.git
