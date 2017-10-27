@@ -76,25 +76,7 @@ k8s:
 
 ### swarm
 
-能夠定義的內容及專寫方式完全依照 [compose-file](https://docs.docker.com/compose/compose-file/) 的規範
-
-#### default
-
-以下是預設的內容, 也就是下述這些 tag 如果你沒定義, 將直接使用預設的內容:
-
-```yaml
-deploy:
-  mode: replicated
-  replicas: 1
-  resources:
-    limits:
-      memory: 512M
-  restart_policy:
-    condition: on-failure
-    delay: 5s
-networks:
-- softleader
-```
+能夠定義的內容及專寫方式完全依照 [compose-file](https://docs.docker.com/compose/compose-file/) 的規範, 在 swarm style 中已經有先定義了一組預設的設定, 在產出 yaml 時如果你沒設定就會直接套用預設設定
 
 #### a real Containerfile example
 
