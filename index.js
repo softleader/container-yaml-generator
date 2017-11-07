@@ -10,6 +10,8 @@ var cmd = Object.keys(pjson.bin)[0];
 var path = require('path');
 var fmt = require('util').format;
 var drc = require('docker-registry-client');
+var jsyaml = require('js-yaml');
+var dot = require('dot-object');
 
 function collect(val, collection) {
   collection.push(val);
@@ -18,6 +20,18 @@ function collect(val, collection) {
 
 function bool(val) {
   return val == 'true';
+}
+
+function keyValue(val, collection) {
+  val = val.split('=');
+  let key = val[0];
+  let value = val.slice(1).join('=');
+  if (!key) {
+    console.log("  error: option `-D <%s>=[%s]' argument missing", key, value);
+    process.exit(1);   
+  }
+  collection.push({key: key, value: value});
+  return collection;
 }
 
 program
@@ -30,7 +44,7 @@ program
   .option('-E, --extend <extend>', 'extend default definition (default: true)', bool, true)
   .option('-f, --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
-  .option('-r, --replace <replace>', 'searches a string, or a regular expression and replaces to a new string in generated YAML.', collect, [])
+  .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
   .on('--help', function() {
     console.log();
     console.log('  %s', pjson.homepage);
@@ -57,18 +71,31 @@ if (program.style === 'k8s') {
   process.exit(1);
 }
 
-if (program.replace.length > 0) {
-  program.replace
-    .map(r => r.split('='))
-    .forEach(r => {
-      var search = r[0];
-      var replace = r[1];
-      if (search.startsWith('/')) {
-        var lastSlash = search.lastIndexOf("/");
-        search = new RegExp(search.slice(1, lastSlash), search.slice(lastSlash + 1));
+// if (program.replace.length > 0) {
+//   program.replace
+//     .map(r => r.split('='))
+//     .forEach(r => {
+//       var search = r[0];
+//       var replace = r[1];
+//       if (search.startsWith('/')) {
+//         var lastSlash = search.lastIndexOf("/");
+//         search = new RegExp(search.slice(1, lastSlash), search.slice(lastSlash + 1));
+//       }
+//       yaml = yaml.replace(search, replace);
+//     });
+// }
+
+if (program.D.length > 0) {
+  var loaded = jsyaml.safeLoad(yaml);
+  program.D.forEach(d => {
+      try {
+        dot.str(d.key, d.value, loaded);
+      } catch (error) {
+        console.log('%s to [%s]', error, value);
+        process.exit(1);    
       }
-      yaml = yaml.replace(search, replace);
     });
+  yaml = jsyaml.safeDump(loaded);
 }
 
 if (!program.silently) {

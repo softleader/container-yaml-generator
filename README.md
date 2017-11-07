@@ -37,7 +37,7 @@ $ gen-yaml --help
     -E, --extend <extend>            extend default definition (default: true)
     -f, --file <file>                specify an alternate definition file (default: Containerfile)
     -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
-    -r, --replace <replace>          searches a string, or a regular expression and replaces to a new string in generated YAML.
+    -D <yaml-property>               set a YAML property.
     -V, --version                    output the version number
     -h, --help                       output usage information
 
@@ -127,6 +127,16 @@ swarm:
 
 Kubernetes style YAML is coming soon :)
 
+### -D \<yaml-property>
+
+`-D` option 提供了一個方式, 不論是 k8s 還是 swarm 的 yaml, 都可以在最後產出前, 將自己的 properties override 進去
+
+```
+$ gen-yaml -s swarm -D networks.net0.external.name=cki $(ls)
+```
+
+這樣可以將預設的 `softleader` network 置換成 `cki`
+
 ## Example
 
 ### 產生當前目錄下所有子目錄的 YAML
@@ -161,14 +171,7 @@ $ gen-yaml -s swarm -o docker-compose.yml .
 
 則產生的 `docker-compose.yml` 檔案只包含當前目錄中的服務 
 
-### 產生 YAML 後將 ${TAG} 取代成 v1.0.0
-
-```
-$ gen-yaml -s swarm -o docker-compose.yml -r /\\\${TAG}/g=v1.0.0 $(ls)
-```
-
 ### 動態對所有服務增加更多的環境參數
-
 
 ```
 $ gen-yaml -s swarm -o docker-compose.yml -e DEVOPS_OPTS="-DdataSource.username=xxx -DdataSource.password=ooo" $(ls)
