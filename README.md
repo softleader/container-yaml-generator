@@ -110,7 +110,7 @@ common-file-upload-rpc:
       condition: on-failure
       delay: 5s
   networks:
-    - softleader
+    - net0
 ```
 
 #### a minimum Containerfile
