@@ -23,7 +23,7 @@ $ npm install -g
 ```
 $ gen-yaml --help
 
-  Usage: gen-yaml [options] <dirs ...>
+  Usage: gen-yaml [options] <dirs...>
 
   Generate YAML for Docker Swarm or Kubernetes
 
@@ -34,10 +34,11 @@ $ gen-yaml --help
     -s, --style <style>              YAML style: k8s, swarm (default: k8s)
     -S, --silently                   generate YAML silently, skip if syntax error, instead of exiting process
     -e, --environment <environment>  append environment to every service definition
+    -p, --publish <port>             publish a container's port(s) to the host
     -E, --extend <extend>            extend default definition (default: true)
     -f, --file <file>                specify an alternate definition file (default: Containerfile)
     -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
-    -D <yaml-property>               set a YAML property.
+    -D <name>=[value]                set a YAML property.
     -V, --version                    output the version number
     -h, --help                       output usage information
 
