@@ -23,24 +23,25 @@ $ npm install -g
 ```
 $ gen-yaml --help
 
-  Usage: gen-yaml [options] <dirs...>
+  Usage: index [options] <dirs...>
 
   Generate YAML for Docker Swarm or Kubernetes
 
 
   Options:
 
-    -o, --output <output>            write to a file, instead of STDOUT
-    -s, --style <style>              YAML style: k8s, swarm (default: k8s)
-    -S, --silently                   generate YAML silently, skip if syntax error, instead of exiting process
-    -e, --environment <environment>  append environment to every service definition
-    -p, --publish <port>             publish a container's port(s) to the host
-    -E, --extend <extend>            extend default definition (default: true)
-    -f, --file <file>                specify an alternate definition file (default: Containerfile)
-    -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
-    -D <name>=[value]                set a YAML property.
-    -V, --version                    output the version number
-    -h, --help                       output usage information
+    -o, --output <output>              write to a file, instead of STDOUT
+    -s, --style <style>                YAML style: k8s, swarm (default: k8s)
+    -S, --silently                     generate YAML silently, skip if syntax error, instead of exiting process
+    -e, --environment <environment>    append environment to every service definition
+    -p, --publish <port>               publish a container's port(s) to the host
+    -P, --publish-all <starting-from>  publish all exposed ports to random ports and add '-Dserver.port' to DEVOPS_OPTS environment
+    -E, --extend <extend>              extend default definition (default: true)
+    -f, --file <file>                  specify an alternate definition file (default: Containerfile)
+    -e, --encoding <encoding>          specify an encoding to read/write file (default: utf8)
+    -D <name>=[value]                  set a YAML property.
+    -V, --version                      output the version number
+    -h, --help                         output usage information
 
   https://github.com/softleader/container-yaml-generator#readme
 ```
@@ -137,6 +138,18 @@ $ gen-yaml -s swarm -D networks.net0.external.name=cki $(ls)
 ```
 
 這樣可以將預設的 `softleader` network 置換成 `cki`
+
+### -P, --publish-all \<starting-from>
+
+`-P` 適用於 dev 環境, 會將所有 rpc 都 expose port 到 host 上供 PG 連線使用
+
+```
+$ gen-yaml -s swarm -P 30000 $(ls)
+```
+
+這樣每個 rpc 都會固定 expose 30000 port, 且指定 `-Dserver.port=30000` 
+
+> 依序往上累加, 如有 10 個 rpc 就會依序 expose 30000~300010
 
 ## Example
 
