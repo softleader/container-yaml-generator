@@ -30,18 +30,18 @@ $ gen-yaml --help
 
   Options:
 
-    -o, --output <output>              write to a file, instead of STDOUT
-    -s, --style <style>                YAML style: k8s, swarm (default: k8s)
-    -S, --silently                     generate YAML silently, skip if syntax error, instead of exiting process
-    -e, --environment <environment>    append environment to every service definition
-    -p, --publish <port>               publish a container's port(s) to the host
-    -P, --publish-all <starting-from>  publish all exposed ports to random ports and add '-Dserver.port' to DEVOPS_OPTS environment
-    -E, --extend <extend>              extend default definition (default: true)
-    -f, --file <file>                  specify an alternate definition file (default: Containerfile)
-    -e, --encoding <encoding>          specify an encoding to read/write file (default: utf8)
-    -D <name>=[value]                  set a YAML property.
-    -V, --version                      output the version number
-    -h, --help                         output usage information
+    -o, --output <output>            write to a file, instead of STDOUT
+    -s, --style <style>              YAML style: k8s, swarm (default: k8s)
+    -S, --silently                   generate YAML silently, skip if syntax error, instead of exiting process
+    -e, --environment <environment>  append environment to every service definition
+    -p, --publish <port>             publish a container's port(s) to the host
+    -E, --extend <extend>            extend default definition (default: true)
+    -f, --file <file>                specify an alternate definition file (default: Containerfile)
+    -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
+    -D <name>=[value]                set a YAML property.
+    --dev <hostname>[/port]          add dev properties to every service definition
+    -V, --version                    output the version number
+    -h, --help                       output usage information
 
   https://github.com/softleader/container-yaml-generator#readme
 ```
@@ -139,17 +139,21 @@ $ gen-yaml -s swarm -D networks.net0.external.name=cki $(ls)
 
 這樣可以將預設的 `softleader` network 置換成 `cki`
 
-### -P, --publish-all \<starting-from>
+### --dev \<hostname>[/port]
 
-`-P` 適用於 dev 環境, 會將所有 rpc 都 expose port 到 host 上供 PG 連線使用
+`--dev` 會自動增加一系列的參數，讓開發環境的 rpc 可以 expose 出來給 PG local 的 gateway 連線
 
 ```
-$ gen-yaml -s swarm -P 30000 $(ls)
+$ gen-yaml -s swarm --dev cki $(ls)
 ```
 
-這樣每個 rpc 都會固定 expose 30000 port, 且指定 `-Dserver.port=30000` 
+以上設定所有 rpc 會改以 `cki` 這個 hostname 註冊給 eureka, 因此所有 PG 的 local 只要定義好 `cki` 就轉到 `192.167.1.91` (以 91 為例) 即可連線
 
-> 依序往上累加, 如有 10 個 rpc 就會依序 expose 30000~300010
+預設的 port 是 30000 開始依序增加, 你也可以自定義 port 的起始點
+
+```
+$ gen-yaml -s swarm --dev cki/40000 $(ls)
+```
 
 ## Example
 

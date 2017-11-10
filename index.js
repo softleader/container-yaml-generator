@@ -34,6 +34,16 @@ function keyValue(val, collection) {
   return collection;
 }
 
+function dev(val) {
+  val = val.split('/');
+  let hostname = val[0];
+  let port = val[1] || '30000';
+  return {
+    hostname: hostname,
+    port: parseInt(port)
+  };
+}
+
 program
   .usage('[options] <dirs...>')
   .description('Generate YAML for Docker Swarm or Kubernetes')
@@ -42,11 +52,11 @@ program
   .option('-S, --silently', 'generate YAML silently, skip if syntax error, instead of exiting process', 0)
   .option('-e, --environment <environment>', 'append environment to every service definition', collect, [])
   .option('-p, --publish <port>', 'publish a container\'s port(s) to the host', collect, [])
-  .option('-P, --publish-all <starting-from>', 'publish all exposed ports to random ports and add \'-Dserver.port\' to DEVOPS_OPTS environment', parseInt, 0)
   .option('-E, --extend <extend>', 'extend default definition (default: true)', bool, true)
   .option('-f, --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
   .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
+  .option('--dev <hostname>[/port]', 'add dev properties to every service definition', dev)
   .on('--help', function() {
     console.log();
     console.log('  %s', pjson.homepage);
