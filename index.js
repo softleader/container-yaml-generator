@@ -11,7 +11,7 @@ var path = require('path');
 var fmt = require('util').format;
 var drc = require('docker-registry-client');
 var jsyaml = require('js-yaml');
-var dot = require('dot-object');
+// var dot = require('dot-object');
 
 function collect(val, collection) {
   collection.push(val);
@@ -22,17 +22,17 @@ function bool(val) {
   return val == 'true';
 }
 
-function keyValue(val, collection) {
-  val = val.split('=');
-  let key = val[0];
-  let value = val.slice(1).join('=');
-  if (!key) {
-    console.log("  error: option `-D <%s>=[%s]' argument missing", key, value);
-    process.exit(1);   
-  }
-  collection.push({key: key, value: value});
-  return collection;
-}
+// function keyValue(val, collection) {
+//   val = val.split('=');
+//   let key = val[0];
+//   let value = val.slice(1).join('=');
+//   if (!key) {
+//     console.log("  error: option `-D <%s>=[%s]' argument missing", key, value);
+//     process.exit(1);   
+//   }
+//   collection.push({key: key, value: value});
+//   return collection;
+// }
 
 function dev(val) {
   val = val.split('/');
@@ -54,7 +54,7 @@ program
   .option('-E, --extend <extend>', 'extend default definition (default: true)', bool, true)
   .option('-f, --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
-  .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
+  // .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
   .option('--dev <hostname>[/port]', 'add dev properties to every service definition', dev)
   .on('--help', function() {
     console.log();
@@ -96,18 +96,18 @@ if (program.style === 'k8s') {
 //     });
 // }
 
-if (program.D.length > 0) {
-  var loaded = jsyaml.safeLoad(yaml);
-  program.D.forEach(d => {
-      try {
-        dot.str(d.key, d.value, loaded);
-      } catch (error) {
-        console.log('%s to [%s]', error, value);
-        process.exit(1);    
-      }
-    });
-  yaml = jsyaml.safeDump(loaded);
-}
+// if (program.D.length > 0) {
+//   var loaded = jsyaml.safeLoad(yaml);
+//   program.D.forEach(d => {
+//       try {
+//         dot.str(d.key, d.value, loaded);
+//       } catch (error) {
+//         console.log('%s to [%s]', error, value);
+//         process.exit(1);    
+//       }
+//     });
+//   yaml = jsyaml.safeDump(loaded);
+// }
 
 if (!program.silently) {
   var fetches = extractImages(yaml)

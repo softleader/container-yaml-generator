@@ -37,7 +37,6 @@ $ gen-yaml --help
     -E, --extend <extend>            extend default definition (default: true)
     -f, --file <file>                specify an alternate definition file (default: Containerfile)
     -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
-    -D <name>=[value]                set a YAML property.
     --dev <hostname>[/port]          add dev properties to every service definition
     -V, --version                    output the version number
     -h, --help                       output usage information
@@ -127,16 +126,6 @@ swarm:
 ### k8s
 
 Kubernetes style YAML is coming soon :)
-
-### -D \<yaml-property>
-
-`-D` option 提供了一個方式, 不論是 k8s 還是 swarm 的 yaml, 都可以在最後產出前, 將自己的 properties override 進去
-
-```
-$ gen-yaml -s swarm -D networks.net0.external.name=cki $(ls)
-```
-
-這樣可以將預設的 `softleader` network 置換成 `cki`
 
 ### --dev \<hostname>[/port]
 
