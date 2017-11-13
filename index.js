@@ -37,7 +37,7 @@ function bool(val) {
 function dev(val) {
   val = val.split('/');
   let hostname = val[0];
-  let port = val[1] || '30000';
+  let port = val[1] || '50000';
   return {
     hostname: hostname,
     port: parseInt(port)

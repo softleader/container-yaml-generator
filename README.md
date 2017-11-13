@@ -137,7 +137,7 @@ $ gen-yaml -s swarm --dev cki $(ls)
 
 以上設定所有 rpc 會改以 `cki` 這個 hostname 註冊給 eureka, 因此所有 PG 的 local 只要定義好 `cki` 就轉到 `192.167.1.91` (以 91 為例) 即可連線
 
-預設的 port 是 30000 開始依序增加, 你也可以自定義 port 的起始點
+預設的 port 是 50000 開始依序增加, 你也可以自定義 port 的起始點
 
 ```
 $ gen-yaml -s swarm --dev cki/40000 $(ls)
