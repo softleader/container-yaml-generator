@@ -4,6 +4,7 @@ var program = require('commander');
 var swarm = require('./lib/swarm');
 var kubernetes = require('./lib/kubernetes');
 var output = require("./lib/output");
+var dev = require("./lib/dev");
 var image = require("./lib/image");
 var pjson = require('./package.json');
 var cmd = Object.keys(pjson.bin)[0];
@@ -51,7 +52,7 @@ program
   .option('-s, --style <style>', 'YAML style: k8s, swarm (default: k8s)', 'k8s')
   .option('-S, --silently', 'generate YAML silently, skip if syntax error, instead of exiting process', 0)
   .option('-e, --environment <environment>', 'append environment to every service definition', collect, [])
-  .option('-E, --extend <extend>', 'extend default definition (default: true)', bool, true)
+  .option('-E, --extend <true or false>', 'extend default definition (default: true)', bool, true)
   .option('-f, --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
   // .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])

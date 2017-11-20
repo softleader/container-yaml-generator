@@ -2,7 +2,6 @@
 
 Command line tool to generate a YAML for Docker Swarm or Kubernetes
 
-> [English](./README_en.md)
 
 ## Install
 
@@ -36,7 +35,7 @@ $ gen-yaml --help
     -s, --style <style>              YAML style: k8s, swarm (default: k8s)
     -S, --silently                   generate YAML silently, skip if syntax error, instead of exiting process
     -e, --environment <environment>  append environment to every service definition
-    -E, --extend <true or false>            extend default definition (default: true)
+    -E, --extend <true or false>     extend default definition (default: true)
     -f, --file <file>                specify an alternate definition file (default: Containerfile)
     -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
     --dev <hostname>[/port]          add dev properties to every service definition
@@ -48,7 +47,8 @@ $ gen-yaml --help
 
 ## Containerfile
 
-*Containerfile* 定義了該 app 在部署時會用到的資源, 預設讀取位置是專案的 root:
+A *Containerfile* is a YAML file, which usually place in the root directory of the project, contains the definition of service in Kubernetes or Docker Swarm, 
+
 
 ```
 your-app
@@ -56,49 +56,47 @@ your-app
 │   ├── main
 │   └── test
 ├── pom.xml
-├── Dockerfile
-├── Jenkinsfile
-└── Containerfile
+├── Containerfile
+└── ...
 ```
 
-*Containerfile* 一共分成兩種定義的 style:
-
-- `swarm` - for Docker Swarm
-- `k8s` - for Kubernetes
-
-sytle 一定要在整份 *Containerfile* 的第一層:
+The top level in *Containerfile* determines style:
 
 ```yaml
 swarm:
   ...
-  
 k8s:
   ...
 ```
 
+- `swarm` - for Docker Swarm
+- `k8s` - for Kubernetes
+
 ### swarm
 
-能夠定義的內容及專寫方式完全依照 [compose-file](https://docs.docker.com/compose/compose-file/) 的規範, 在 swarm style 中已經有先定義了一組預設的設定, 在產出 yaml 時如果你沒設定就會直接套用預設設定
+You can use every syntax of [compose-file](https://docs.docker.com/compose/compose-file/) version 3.3 format in each service swarm configuration. Every service configuration extends a default configuration by defualt.
 
-#### a real Containerfile example
+> You can `$ gen-yaml --extend false ...` to switch off the extension
+
+#### A real Containerfile example
 
 ```yaml
 swarm:
   common-file-upload-rpc:
-    image: softleader.com.tw:5000/softleader-common-file-upload-rpc:${TAG}
+    image: 'softleader/eureka'
     volumes:
-      - /tmp/uploaded:/uploaded
+      - '/tmp/uploaded:/uploaded'
     deploy:
       resources:
         limits:
           cpus: '0.5'
 ```
 
-經過 `gen-yaml` 轉換後將會變成:
+after `gen-yaml`
 
 ```yaml
 common-file-upload-rpc:
-  image: 'softleader.com.tw:5000/softleader-common-file-upload-rpc:${TAG}'
+  image: 'softleader/eureka'
   volumes:
     - '/tmp/uploaded:/uploaded'
   deploy:
@@ -115,14 +113,14 @@ common-file-upload-rpc:
     - net0
 ```
 
-#### a minimum Containerfile
+#### A minimum Containerfile
 
-如果你沒有任何額外設定, 一個最小的 *Containerfile* 只需要定義 service name 以及其 image 位置即可
+All you have to do is just define service name and image
 
 ```yaml
 swarm:
   calculate-rpc:
-    image: softleader.com.tw:5000/softleader-calculate-rpc:${TAG}
+    image: softleader.com.tw:5000/softleader-calculate-rpc:v1.0.0
 ```
 
 ### k8s
@@ -131,25 +129,23 @@ Kubernetes style YAML is coming soon :)
 
 ### --dev \<hostname>[/port]
 
-`--dev` 會自動增加一系列的參數，讓開發環境的 rpc 可以 expose 出來給 PG local 的 gateway 連線
+`--dev` adds several configurations into YAML exposes ports to host for every services. It is design for Spring cloud + eureka project.
 
 ```
-$ gen-yaml -s swarm --dev cki $(ls)
+$ gen-yaml -s swarm --dev 192.169.1.91 $(ls)
 ```
 
-以上設定所有 rpc 會改以 `cki` 這個 hostname 註冊給 eureka, 因此所有 PG 的 local 只要定義好 `cki` 就轉到 `192.167.1.91` (以 91 為例) 即可連線
+service use `192.169.1.91` as hostname to registry into Spring eureka, therefor you can discover and access service from eureka.
 
-預設的 port 是 50000 開始依序增加, 你也可以自定義 port 的起始點
+By defualt `--dev` exposes port starting from 50000, you can determine where to start as well:
 
 ```
-$ gen-yaml -s swarm --dev cki/40000 $(ls)
+$ gen-yaml -s swarm --dev 192.169.1.91/40000 $(ls)
 ```
 
 ## Example
 
-### 產生當前目錄下所有子目錄的 YAML
-
-假設目錄結構如下:
+### Generate YAML by all subdir in current dir
 
 ```
 ~/temp
@@ -163,41 +159,36 @@ $ gen-yaml -s swarm --dev cki/40000 $(ls)
     └── Containerfile
 ```
 
-在 `~/temp` 中執行:
-
 ```
+$ pwd
+~/temp
+
 $ gen-yaml -s swarm -o docker-compose.yml $(ls)
 ```
 
-則會產生 `~/temp/docker-compose.yml` 檔案, 裡面包含了上述 4 個 rpc 服務
 
-### 產生當前目錄的 YAML
+### Generate YAML in current dir
 
 ```
 $ gen-yaml -s swarm -o docker-compose.yml .
 ```
 
-則產生的 `docker-compose.yml` 檔案只包含當前目錄中的服務 
 
-### 動態對所有服務增加更多的環境參數
+### Add environment to every service definitions
 
 ```
-$ gen-yaml -s swarm -o docker-compose.yml -e DEVOPS_OPTS="-DdataSource.username=xxx -DdataSource.password=ooo" $(ls)
+$ gen-yaml -s swarm -o docker-compose.yml \
+	-e DEVOPS_OPTS="-DdataSource.username=xxx -DdataSource.password=ooo" $(ls)
 ```
 
-產生後 yaml 就會加上:
 
-```yml
+```yaml
 # docker-compose.yml
 
 setting-system-param-rpc:
-  image: 'softleader.com.tw:5000/softleader-setting-system-param-rpc:${TAG}'
+  image: 'softleader/eureka'
   deploy:
     ...
   environment:
     DEVOPS_OPTS: '-DdataSource.username=xxx -DdataSource.password=ooo'
 ```
-
-*DEVOPS_OPTS* 是所有 rpc 預留的 docker 環境變數，可以強制覆蓋 config-server 回傳的參數
-
-> 可用在部署公司測試環境時，更換掉客戶的 config-server 中的某些參數
