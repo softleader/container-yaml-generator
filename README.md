@@ -36,7 +36,7 @@ $ gen-yaml --help
     -s, --style <style>              YAML style: k8s, swarm (default: k8s)
     -S, --silently                   generate YAML silently, skip if syntax error, instead of exiting process
     -e, --environment <environment>  append environment to every service definition
-    -E, --extend <true or false>            extend default definition (default: true)
+    -E, --extend <true or false>     extend default definition (default: true)
     -f, --file <file>                specify an alternate definition file (default: Containerfile)
     -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
     --dev <hostname>[/port]          add dev properties to every service definition
@@ -182,7 +182,8 @@ $ gen-yaml -s swarm -o docker-compose.yml .
 ### 動態對所有服務增加更多的環境參數
 
 ```
-$ gen-yaml -s swarm -o docker-compose.yml -e DEVOPS_OPTS="-DdataSource.username=xxx -DdataSource.password=ooo" $(ls)
+$ gen-yaml -s swarm -o docker-compose.yml \
+	-e DEVOPS_OPTS="-DdataSource.username=xxx -DdataSource.password=ooo" $(ls)
 ```
 
 產生後 yaml 就會加上:
