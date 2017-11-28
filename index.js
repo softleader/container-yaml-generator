@@ -4,7 +4,6 @@ var program = require('commander');
 var swarm = require('./lib/swarm');
 var kubernetes = require('./lib/kubernetes');
 var output = require("./lib/output");
-var dev = require("./lib/dev");
 var image = require("./lib/image");
 var pjson = require('./package.json');
 var cmd = Object.keys(pjson.bin)[0];
