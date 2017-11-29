@@ -55,7 +55,7 @@ program
   .option('-f, --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
   // .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
-  .option('--dev <hostname>[/port]', 'add dev properties to every service definition', dev)
+  .option('--dev <hostname>/<port>', 'add dev properties to every service definition', dev)
   .on('--help', function() {
     console.log();
     console.log('  %s', pjson.homepage);
