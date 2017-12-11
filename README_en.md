@@ -31,6 +31,8 @@ $ docker exec 74c0 gen-yaml --version
 17.11.5
 ```
 
+`path/to/gen-yaml-dir` is the root dir where you want `gen-yaml` to access
+
 ## Usage
 
 ![](./doc/overview.svg)
