@@ -18,6 +18,16 @@ $ cd container-yaml-generator
 $ npm install -g
 ```
 
+or run on Docker:
+
+```
+$ docker run -itd -v path/to/gen-yaml-dir:/app softleader/gen-yaml
+74c01f835b14f73d4b7e396c8377c9e3e2616e67f2893855f63fbd21ff6290f8
+
+$ docker exec 74c0 gen-yaml --version
+17.11.5
+```
+
 ## Usage
 
 ![](./doc/overview.svg)
