@@ -67,7 +67,9 @@ program
   .parse(process.argv);
 
 if (!program.args || program.args.length <= 0) {
-  throw Error('"%s" requires at least one argument.\nSee \'%s --help\'.', cmd, cmd);
+  console.error('"%s" requires at least one argument.', cmd);	
+  console.error('See \'%s --help\'.', cmd);
+  process.exit(1);
 }
 
 var yaml;
@@ -77,7 +79,9 @@ if (program.style === 'k8s') {
 } else if (program.style === 'swarm') {
   yaml = swarm.generate(program);
 } else {
-  throw Error('Unsupported YAML style: %s\nSee \'%s --help\'.', program.style, cmd);
+  console.error('Unsupported YAML style: %s', program.style);
+  console.error('See \'%s --help\'.', cmd);
+  process.exit(1);
 }
 
 // if (program.replace.length > 0) {
@@ -120,7 +124,8 @@ if (!program.silently) {
     output.write(program.output, yaml, program.encoding);
   })
   .catch(err => {
-    throw Error(err.message)
+    console.error(err.message);
+    process.exit(1);
   });
 } else {
   output.write(program.output, yaml, program.encoding);
