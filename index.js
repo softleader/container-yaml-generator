@@ -53,6 +53,8 @@ program
   .option('-e, --environment <environment>', 'append environment to every service definition', collect, [])
   .option('-E, --extend <true or false>', 'extend default definition (default: true)', bool, true)
   .option('-f, --file <file>', 'specify an alternate definition file (default: Containerfile)', 'Containerfile')
+  .option('--net0 <net0>', 'specify a external network for \'net0\'')
+  .option('--volume0 <volume0>', 'specify a device for \'volume0\'')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
   // .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
   .option('--dev <hostname>/<port>', 'add dev properties to every service definition', dev)
