@@ -1,6 +1,6 @@
 {
   "name": "container-yaml-generator",
-  "version": "17.12.2",
+  "version": "17.12.1",
   "description": "Command line tool to generate a YAML for Docker Swarm or Kubernetes",
   "bin": {
     "gen-yaml": "index.js"
@@ -19,7 +19,7 @@
     "url": "https://github.com/softleader/container-yaml-generator/issues"
   },
   "homepage": "https://github.com/softleader/container-yaml-generator#readme",
-  "npm": {
+  "dependencies": {
     "commander": "^2.11.0",
     "docker-registry-client": "^3.2.12",
     "extend": "^3.0.1",
