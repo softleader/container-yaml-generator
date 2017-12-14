@@ -19,7 +19,7 @@
     "url": "https://github.com/softleader/container-yaml-generator/issues"
   },
   "homepage": "https://github.com/softleader/container-yaml-generator#readme",
-  "dependencies": {
+  "npm": {
     "commander": "^2.11.0",
     "docker-registry-client": "^3.2.12",
     "extend": "^3.0.1",
