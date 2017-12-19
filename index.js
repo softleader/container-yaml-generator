@@ -112,9 +112,9 @@ if (program.style === 'k8s') {
 // }
 
 if (!program.silently) {
-  var fetches = extractImages(yaml)
+  var fetches = extractImages(program.style, yaml)
+    .filter(repo => !drc.parseRepo(repo.split(':')[0]).index.official)
     .map(drc.parseRepoAndTag)
-    .filter(repo => !repo.official)
     .map(repo => {
       repo.schema = 'http';
       return image.exist(repo);
@@ -131,10 +131,11 @@ if (!program.silently) {
   output.write(program.output, yaml, program.encoding);
 }
 
-function extractImages(yaml) {
-  var images = [], regex = /image: '(.+)'/g, result;
+function extractImages(style, yaml) {
+  var images = [], regex = /image: (.+)/g, result;
   while (result = regex.exec(yaml)) {
-    images.push(result[1]);
+    images.push(result[1].replace(/'/g, ''));
   }
+  // console.log(images);
   return images;
 }
