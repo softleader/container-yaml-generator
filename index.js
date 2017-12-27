@@ -117,7 +117,14 @@ if (program.style === 'k8s') {
 
 if (!program.silently) {
   var fetches = extractImages(program.style, yaml)
-    .filter(repo => !drc.parseRepo(repo.split(':')[0]).index.official)
+    .filter(repo => {
+      try {
+        !drc.parseRepo(repo.split(':')[0]).index.official
+      } catch (err) {
+        console.error('error checking %s', repo);
+        throw err
+      }
+    })
     .map(drc.parseRepoAndTag)
     .map(repo => {
       repo.schema = 'http';
