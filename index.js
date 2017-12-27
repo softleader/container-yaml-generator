@@ -34,15 +34,17 @@ function bool(val) {
 //   return collection;
 // }
 
-function dev(val) {
-  val = val.split('/');
-  let hostname = val[0];
-  let port = val[1] || '50000';
-  return {
-    hostname: hostname,
-    port: parseInt(port)
-  };
-}
+// function dev(val) {
+//   val = val.split('/');
+//   let hostname = val[0];
+//   let port = val[1] || '50000';
+//   let ignore = val[2] || ''
+//   return {
+//     hostname: hostname,
+//     port: parseInt(port),
+//     ignore: ignore.split(",")
+//   };
+// }
 
 program
   .usage('[options] <dirs...>')
@@ -57,7 +59,9 @@ program
   .option('--volume0 <volume0>', 'specify a device for \'volume0\'')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
   // .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
-  .option('--dev <hostname>/<port>', 'add dev properties to every service definition', dev)
+  .option('--dev-hostname <hostname>', 'activate dev mode, will add dev properties to every service definition')
+  .option('--dev-port <port>', 'determine dev port in dev mode', parseInt)
+  .option('--dev-ignore <ignore>', 'determine dev ignore service names in dev mode')
   .on('--help', function() {
     console.log();
     console.log('  %s', pjson.homepage);
