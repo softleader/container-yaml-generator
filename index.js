@@ -144,10 +144,17 @@ if (!program.silently) {
 }
 
 function extractImages(style, yaml) {
-  var images = [], regex = /image: (.+)/g, result;
-  while (result = regex.exec(yaml)) {
-    images.push(result[1].replace(/'/g, ''));
+  let y = jsyaml.safeLoad(jsyaml);
+  if (style == "swarm") {
+    // let regex = /image: (.+)/g, result;
+    // while (result = regex.exec(yaml)) {
+    //   images.push(result[1].replace(/'/g, ''));
+    // }
+    // console.log(images);
+    return y.services.map(s => s.image)
+  } 
+  // k8s
+  else {
+    return [];
   }
-  // console.log(images);
-  return images;
 }
