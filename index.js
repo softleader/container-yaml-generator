@@ -151,7 +151,7 @@ function extractImages(style, yaml) {
     //   images.push(result[1].replace(/'/g, ''));
     // }
     // console.log(images);
-    return y.services.map(s => s.image)
+    return Object.keys(y.services).map(key => y.services[key].image)
   } 
   // k8s
   else {
