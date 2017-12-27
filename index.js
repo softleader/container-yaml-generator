@@ -136,6 +136,7 @@ if (!program.silently) {
   })
   .catch(err => {
     console.error(err.message);
+    console.error("\n\n" + yaml)
     process.exit(1);
   });
 } else {
