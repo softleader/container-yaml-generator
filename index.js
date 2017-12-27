@@ -144,7 +144,7 @@ if (!program.silently) {
 }
 
 function extractImages(style, yaml) {
-  let y = jsyaml.safeLoad(jsyaml);
+  let y = jsyaml.safeLoad(yaml);
   if (style == "swarm") {
     // let regex = /image: (.+)/g, result;
     // while (result = regex.exec(yaml)) {
