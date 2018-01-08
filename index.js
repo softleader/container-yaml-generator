@@ -59,7 +59,7 @@ program
   .option('--volume0 <volume0>', 'specify a device for \'volume0\'')
   .option('-e, --encoding <encoding>', 'specify an encoding to read/write file (default: utf8)', 'utf8')
   // .option('-D <name>=[value]', 'set a YAML property.', keyValue, [])
-  .option('--dev-hostname <hostname>', 'activate dev mode, will add dev properties to every service definition')
+  .option('--dev-ipAddress <ipAddress>', 'activate dev mode, will add ipAddress properties to every service definition')
   .option('--dev-port <port>', 'determine dev port in dev mode', parseInt)
   .option('--dev-ignore <ignore>', 'determine dev ignore service names in dev mode')
   .on('--help', function() {
