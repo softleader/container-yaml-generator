@@ -147,7 +147,7 @@ Kubernetes style YAML is coming soon :)
 
 ### Dev mode
 
-dev 模式僅適用於 spring boot + spring eureka ecosystem, 會自動的 publish port 出來到讓開發人員可以從外面連到 docker 內
+dev 模式僅適用於 spring boot + spring eureka 架構, 會自動的 publish port 出來到讓開發人員可以從外面連到 docker 內
 
 ```
 $ gen-yaml -s swarm --dev-ipAddress 192.168.1.60 --dev-port 50000 --dev-ignore some-service $(ls)
