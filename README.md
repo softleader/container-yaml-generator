@@ -45,13 +45,17 @@ $ gen-yaml --help
   Options:
 
     -o, --output <output>            write to a file, instead of STDOUT
-    -s, --style <style>              YAML style: k8s, swarm (default: k8s)
+    -s, --style <style>              YAML style: k8s, swarm (default: k8s) (default: k8s)
     -S, --silently                   generate YAML silently, skip if syntax error, instead of exiting process
-    -e, --environment <environment>  append environment to every service definition
-    -E, --extend <true or false>     extend default definition (default: true)
-    -f, --file <file>                specify an alternate definition file (default: Containerfile)
-    -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8)
-    --dev <hostname>[/port]          add dev properties to every service definition
+    -e, --environment <environment>  append environment to every service definition (default: )
+    -E, --extend <true or false>     extend default definition (default: true) (default: true)
+    -f, --file <file>                specify an alternate definition file (default: Containerfile) (default: Containerfile)
+    --net0 <net0>                    specify a external network for 'net0'
+    --volume0 <volume0>              specify a device for 'volume0'
+    -e, --encoding <encoding>        specify an encoding to read/write file (default: utf8) (default: utf8)
+    --dev-ipAddress <ipAddress>      activate dev mode, will add ipAddress properties to every service definition
+    --dev-port <port>                determine dev port in dev mode
+    --dev-ignore <ignore>            determine dev ignore service names in dev mode
     -V, --version                    output the version number
     -h, --help                       output usage information
 
