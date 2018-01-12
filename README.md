@@ -145,21 +145,17 @@ swarm:
 
 Kubernetes style YAML is coming soon :)
 
-### --dev \<hostname>[/port]
+### Dev mode
 
-`--dev` 會自動增加一系列的參數，讓開發環境的 rpc 可以 expose 出來給 PG local 的 gateway 連線
-
-```
-$ gen-yaml -s swarm --dev cki $(ls)
-```
-
-以上設定所有 rpc 會改以 `cki` 這個 hostname 註冊給 eureka, 因此所有 PG 的 local 只要定義好 `cki` 就轉到 `192.167.1.91` (以 91 為例) 即可連線
-
-預設的 port 是 50000 開始依序增加, 你也可以自定義 port 的起始點
+dev 模式僅適用於 spring boot + spring eureka ecosystem, 會自動的 publish port 出來到讓開發人員可以從外面連到 docker 內
 
 ```
-$ gen-yaml -s swarm --dev cki/40000 $(ls)
+$ gen-yaml -s swarm --dev-ipAddress 192.168.1.60 --dev-port 50000 --dev-ignore some-service $(ls)
 ```
+
+- `--dev-ipAddress` - 會設定給 `-Deureka.instance.ipAddress` 及  `-Deureka.instance.hostname`
+- `--dev-port` - 要從什麼 port 開始依序 publish
+- `--dev-ignore` - 要忽略套用的 service 名稱
 
 ## Example
 

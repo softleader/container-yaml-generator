@@ -147,21 +147,17 @@ swarm:
 
 Kubernetes style YAML is coming soon :)
 
-### --dev \<hostname>[/port]
+### Dev mode
 
-`--dev` adds several configurations into YAML exposes ports to host for every services. It is design for Spring cloud + eureka project.
-
-```
-$ gen-yaml -s swarm --dev 192.169.1.91 $(ls)
-```
-
-service use `192.169.1.91` as hostname to registry into Spring eureka, therefor you can discover and access service from eureka.
-
-By defualt `--dev` exposes port starting from 50000, you can determine where to start as well:
+dev mode is design for Spring cloud + eureka artitecture projects, it publishes port to docker automatically to let developer access from outside docker 
 
 ```
-$ gen-yaml -s swarm --dev 192.169.1.91/40000 $(ls)
+$ gen-yaml -s swarm --dev-ipAddress 192.168.1.60 --dev-port 50000 --dev-ignore some-service $(ls)
 ```
+
+- `--dev-ipAddress` - will add `-Deureka.instance.ipAddress` and  `-Deureka.instance.hostname` to system properties
+- `--dev-port` - determine a port to start publish
+- `--dev-ignore` - determine the service name to ignore apply dev mode
 
 ## Example
 
